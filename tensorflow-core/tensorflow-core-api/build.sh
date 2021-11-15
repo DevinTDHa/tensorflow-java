@@ -84,7 +84,7 @@ if [[ -x /usr/bin/install_name_tool ]] && [[ -e $BAZEL_BIN/external/llvm_openmp/
 fi
 
 sudo chown `whoami` $TENSORFLOW_BIN/libtensorflow_cc.dylib
-sudo chmod -R o+r $TENSORFLOW_BIN/external/platforms/
+sudo chmod -R o+r $BAZEL_SRCS/external/platforms/
 
 GEN_SRCS_DIR=src/gen/java
 mkdir -p $GEN_SRCS_DIR

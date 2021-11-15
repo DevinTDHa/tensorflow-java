@@ -83,6 +83,9 @@ if [[ -x /usr/bin/install_name_tool ]] && [[ -e $BAZEL_BIN/external/llvm_openmp/
    install_name_tool -change $UGLYPATH @rpath/libiomp5.dylib $TENSORFLOW_BIN/libtensorflow_framework.2.dylib
 fi
 
+sudo chown `whoami` $TENSORFLOW_BIN/libtensorflow_cc.dylib
+sudo chmod -R o+r $TENSORFLOW_BIN/external/platforms/
+
 GEN_SRCS_DIR=src/gen/java
 mkdir -p $GEN_SRCS_DIR
 

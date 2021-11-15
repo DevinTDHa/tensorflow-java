@@ -181,6 +181,7 @@ build:macos --copt=-DGRPC_BAZEL_BUILD
 
 # Settings for MacOS on ARM CPUs.
 build:macos_arm64 --cpu=darwin_arm64
+build:macos_arm64 --host_cpu=darwin_arm64
 
 # iOS configs for each architecture and the fat binary builds.
 build:ios --apple_platform_type=ios
@@ -664,3 +665,6 @@ build:experimental_enable_bef_thunk --@rules_cuda//cuda:cuda_runtime=//tensorflo
 build:experimental_enable_bef_thunk --nocheck_visibility
 build:experimental_enable_bef_thunk --incompatible_strict_action_env
 build:experimental_enable_bef_thunk --config=monolithic
+
+build:opt --copt=-Wno-sign-compare
+build:opt --host_copt=-Wno-sign-compare

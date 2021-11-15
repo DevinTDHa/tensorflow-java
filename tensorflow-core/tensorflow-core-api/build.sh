@@ -10,7 +10,8 @@ if [[ -d $BAZEL_VC ]]; then
     export BUILD_FLAGS="--copt=//arch:AVX `#--copt=//arch:AVX2` --define=override_eigen_strong_inline=true"
     export PYTHON_BIN_PATH=$(which python.exe)
 else
-    export BUILD_FLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` --linkopt=-lstdc++ --host_linkopt=-lstdc++"
+    #export BUILD_FLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` --linkopt=-lstdc++ --host_linkopt=-lstdc++"
+    export BUILD_FLAGS="--linkopt=-lstdc++ --host_linkopt=-lstdc++"
     export PYTHON_BIN_PATH=$(which python3)
 fi
 
@@ -33,13 +34,18 @@ BUILD_FLAGS="$BUILD_FLAGS --experimental_repo_remote_exec --python_path="$PYTHON
 BUILD_FLAGS="$BUILD_FLAGS --distinct_host_configuration=true"
 
 # Build C/C++ API of TensorFlow itself including a target to generate ops for Java
-bazel --bazelrc=tensorflow.bazelrc build $BUILD_FLAGS ${BUILD_USER_FLAGS:-} \
+sudo bazel --bazelrc=tensorflow.bazelrc build --config=opt --config=macos_arm64 $BUILD_FLAGS ${BUILD_USER_FLAGS:-} \
     @org_tensorflow//tensorflow:tensorflow_cc \
     @org_tensorflow//tensorflow/tools/lib_package:jnilicenses_generate \
     :java_proto_gen_sources \
     :java_op_exporter \
     :java_api_import \
-    :custom_ops_test
+    :custom_ops_test \
+    --define=ABSOLUTE_JAVABASE=/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home \
+    --javabase=@bazel_tools//tools/jdk:absolute_javabase \
+    --host_javabase=@bazel_tools//tools/jdk:absolute_javabase \
+    --java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
+    --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \
 
 export BAZEL_SRCS=$(pwd -P)/bazel-tensorflow-core-api
 export BAZEL_BIN=$(pwd -P)/bazel-bin
@@ -49,14 +55,14 @@ export TENSORFLOW_BIN=$BAZEL_BIN/external/org_tensorflow/tensorflow
 TENSORFLOW_SO=($TENSORFLOW_BIN/libtensorflow_cc.so.?.?.?)
 if [[ -f $TENSORFLOW_SO ]]; then
     export TENSORFLOW_LIB=$TENSORFLOW_SO
-    ln -sf $(basename $TENSORFLOW_SO) $TENSORFLOW_BIN/libtensorflow_cc.so
-    ln -sf $(basename $TENSORFLOW_SO) $TENSORFLOW_BIN/libtensorflow_cc.so.2
+    sudo ln -sf $(basename $TENSORFLOW_SO) $TENSORFLOW_BIN/libtensorflow_cc.so
+    sudo ln -sf $(basename $TENSORFLOW_SO) $TENSORFLOW_BIN/libtensorflow_cc.so.2
 fi
 TENSORFLOW_DYLIB=($TENSORFLOW_BIN/libtensorflow_cc.?.?.?.dylib)
 if [[ -f $TENSORFLOW_DYLIB ]]; then
     export TENSORFLOW_LIB=$TENSORFLOW_DYLIB
-    ln -sf $(basename $TENSORFLOW_DYLIB) $TENSORFLOW_BIN/libtensorflow_cc.dylib
-    ln -sf $(basename $TENSORFLOW_DYLIB) $TENSORFLOW_BIN/libtensorflow_cc.2.dylib
+    sudo ln -sf $(basename $TENSORFLOW_DYLIB) $TENSORFLOW_BIN/libtensorflow_cc.dylib
+    sudo ln -sf $(basename $TENSORFLOW_DYLIB) $TENSORFLOW_BIN/libtensorflow_cc.2.dylib
 fi
 TENSORFLOW_DLLS=($TENSORFLOW_BIN/tensorflow_cc.dll.if.lib $TENSORFLOW_BIN/libtensorflow_cc.dll.ifso)
 for TENSORFLOW_DLL in ${TENSORFLOW_DLLS[@]}; do
@@ -69,7 +75,7 @@ echo "Listing $TENSORFLOW_BIN:" && ls -l $TENSORFLOW_BIN
 
 if [[ -x /usr/bin/install_name_tool ]] && [[ -e $BAZEL_BIN/external/llvm_openmp/libiomp5.dylib ]]; then
    # Fix library with correct rpath on Mac
-   chmod +w $BAZEL_BIN/external/llvm_openmp/libiomp5.dylib $TENSORFLOW_BIN/libtensorflow_cc.2.dylib $TENSORFLOW_BIN/libtensorflow_framework.2.dylib
+   sudo chmod +w $BAZEL_BIN/external/llvm_openmp/libiomp5.dylib $TENSORFLOW_BIN/libtensorflow_cc.2.dylib $TENSORFLOW_BIN/libtensorflow_framework.2.dylib
    UGLYPATH=$(otool -L $TENSORFLOW_BIN/libtensorflow_cc.2.dylib | grep @loader_path | cut -f1 -d ' ')
    echo $UGLYPATH
    install_name_tool -add_rpath @loader_path/. -id @rpath/libiomp5.dylib $BAZEL_BIN/external/llvm_openmp/libiomp5.dylib

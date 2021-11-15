@@ -54,6 +54,12 @@
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
       <version>${javacpp.version}</version>
+      <classifier>${javacpp.platform.macosx-arm64}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+      <version>${javacpp.version}</version>
       <classifier>${javacpp.platform.windows-x86_64}</classifier>
     </dependency>
     <dependency>
@@ -77,6 +83,12 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
+      <classifier>${javacpp.platform.macosx-arm64.extension}</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>${javacpp.moduleId}</artifactId>
+      <version>${project.version}</version>
       <classifier>${javacpp.platform.windows-x86_64.extension}</classifier>
     </dependency>
   </dependencies>
@@ -91,7 +103,7 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar</Class-Path>
+                    <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64.jar ${javacpp.moduleId}-macosx-x86_64.jar ${javacpp.moduleId}-windows-x86_64.jar ${javacpp.moduleId}-macosx-arm64.jar</Class-Path>
                   <Automatic-Module-Name>${java.module.name}</Automatic-Module-Name>
                 </manifestEntries>
               </archive>

@@ -60,3 +60,6 @@ gradleBuild
 # Deployment Files
 settings.xml
 pom.xml.asc
+
+# Editor backup files
+*~

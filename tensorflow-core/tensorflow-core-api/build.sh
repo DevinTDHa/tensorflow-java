@@ -41,7 +41,7 @@ sudo bazel --bazelrc=tensorflow.bazelrc build --config=opt --config=macos_arm64 
     :java_op_exporter \
     :java_api_import \
     :custom_ops_test \
-    --define=ABSOLUTE_JAVABASE=/Library/Java/JavaVirtualMachines/zulu-11.jdk/Contents/Home \
+    --define=ABSOLUTE_JAVABASE=/Users/ducha/.sdkman/candidates/java/11.0.13-zulu/zulu-11.jdk/Contents/Home \
     --javabase=@bazel_tools//tools/jdk:absolute_javabase \
     --host_javabase=@bazel_tools//tools/jdk:absolute_javabase \
     --java_toolchain=@bazel_tools//tools/jdk:toolchain_vanilla \

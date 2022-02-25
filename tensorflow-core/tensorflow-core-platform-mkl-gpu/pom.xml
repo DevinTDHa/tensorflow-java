@@ -39,12 +39,12 @@
       <artifactId>javacpp</artifactId>
       <version>${javacpp.version}</version>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
       <version>${javacpp.version}</version>
       <classifier>${javacpp.platform.linux-x86_64}</classifier>
-    </dependency>
+    </dependency> -->
     <!--dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
@@ -56,12 +56,12 @@
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
       <version>${project.version}</version>
       <classifier>${javacpp.platform.linux-x86_64.extension}</classifier>
-    </dependency>
+    </dependency> -->
     <!--dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>${javacpp.moduleId}</artifactId>
@@ -80,7 +80,8 @@
             <configuration>
               <archive>
                 <manifestEntries>
-                  <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64-mkl-gpu.jar ${javacpp.moduleId}-windows-x86_64-mkl-gpu.jar</Class-Path>
+                  <!-- <Class-Path>${javacpp.moduleId}.jar ${javacpp.moduleId}-linux-x86_64-mkl-gpu.jar ${javacpp.moduleId}-windows-x86_64-mkl-gpu.jar</Class-Path> -->
+                  <Class-Path>${javacpp.moduleId}.jar</Class-Path>
                   <Automatic-Module-Name>${java.module.name}</Automatic-Module-Name>
                 </manifestEntries>
               </archive>

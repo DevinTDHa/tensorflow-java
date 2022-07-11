@@ -10,7 +10,8 @@ if [[ -d $BAZEL_VC ]]; then
     export BUILD_FLAGS="--copt=//arch:AVX `#--copt=//arch:AVX2` --define=override_eigen_strong_inline=true"
     export PYTHON_BIN_PATH=$(which python.exe)
 else
-    export BUILD_FLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` --linkopt=-lstdc++ --host_linkopt=-lstdc++"
+#     export BUILD_FLAGS="--copt=-msse4.1 --copt=-msse4.2 --copt=-mavx `#--copt=-mavx2 --copt=-mfma` --linkopt=-lstdc++ --host_linkopt=-lstdc++"
+    export BUILD_FLAGS="`#--copt=-mavx2 --copt=-mfma` --linkopt=-lstdc++ --host_linkopt=-lstdc++"
     export PYTHON_BIN_PATH=$(which python3)
 fi
 
